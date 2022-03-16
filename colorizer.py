@@ -4,17 +4,21 @@ from turtle import width
 import cv2
 from cv2 import CV_16S, FONT_HERSHEY_SIMPLEX, LINE_AA, destroyAllWindows, putText, resize, waitKey
 from cv2 import dnn_Model
+from cv2 import VideoWriter
 import numpy as np 
 import time 
 from os.path import splitext, basename, join  
 import tensorflow
 
 class Colorizer: 
-    def __init__(self, height = 480, width = 600):
+    def __init__(self, use_cuda=False, height = 480, width = 600):
         (self.height, self.width) = height, width
 
         self.colorModel = cv2.dnn.readNetFromCaffe("model/colorization_deploy_v2.prototxt",
         caffeModel="model/colorization_release_v2.caffemodel")
+        if use_cuda:
+            self.colorModel.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+            self.colorModel.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
         clusterCenters= np.load("model/pts_in_hull.npy")
         clusterCenters = clusterCenters.transpose().reshape(2, 313, 1, 1)
@@ -44,8 +48,8 @@ class Colorizer:
         prevFrameTime = 0
         nextFrameTime = 0 
 
-        out = cv2.VideoWriter(join("output", splitext(basename(videoName))[0] + '.avi'),
-        cv2.VideoWriter_fourcc(*"MJPG"), cap.get(cv2.CAP_PROP_FPS), (self.width*2, self.height, True))
+        fourcc = cv2.VideoWriter_fourcc(*"MJPG") 
+        out = cv2.VideoWriter(filename = (join("output", splitext(basename(videoName))[0] + '.avi')), fourcc = fourcc, fps = (int(cap.get(cv2.CAP_PROP_FPS))), frameSize =(self.width*2, self.height))
 
         while success: 
             self.img = cv2.resize(self.img, (self.width, self.height))
@@ -63,6 +67,7 @@ class Colorizer:
             (255,255,255), 2, cv2.LINE_AA)
 
             cv2.imshow("Output", self.imgFinal)
+
 
             key = cv2.waitKey (1) & 0xFF
             if key == ord("q"):
