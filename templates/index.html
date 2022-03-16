@@ -73,9 +73,11 @@
                             <h4>Try it with an image & video from our database</h4>
                             <p class="text-black-50 mb-0">Colorizer is open source project. This means it is free to study, re-use, and modify this code as they see fit with no charge</p>
                             <br>
-                            <form action="/submit" method="post" enctype="multipart/form-data" class="text-center">
-                                <input type="file" name="file" id="actual-btn" hidden/>
-                                <label for="actual-btn" class="btn btn-primary">Upload</label><input type="submit" value="upload" id="submit-btn" hidden/> <label for="submit-btn" class="btn btn-primary">Colorize</label>
+                            <form method=post enctype=multipart/form-data>
+                                <input type=file name=file id="actual-btn" hidden>
+                                <label for="actual-btn" class="btn btn-primary">Upload</label>
+                                <input type=submit value=Upload id="submit-btn" hidden>
+                                <label for="submit-btn" class="btn btn-primary">Colorize</label>
                             </form>
                         </div>
                     </div>

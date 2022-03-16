@@ -31,10 +31,12 @@ class Colorizer:
         self.img = cv2.resize(self.img, (self.width, self.height))
 
         self.processFrame()
-        cv2.imwrite(join("output", basename(imgName) ), self.imgFinal)
-
-        cv2.imshow("Output", self.imgFinal)
-        cv2.waitKey(0)
+        a = cv2.imwrite(join("output", basename(imgName) ), self.imgFinal)
+        print(self.imgFinal)
+        print(a)
+        # cv2.imshow("Output", self.imgFinal)
+        # cv2.waitKey(0)
+        return "output/" + imgName
 
     def processVideo(self, videoName):
         cap = cv2.VideoCapture(videoName)
